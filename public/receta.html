@@ -21,7 +21,6 @@
     <nav>
       <a href="index.html">Inicio</a>
       <a href="probador.html">Probador virtual</a>
-      <a href="examen.html">Pre-examen visual</a>
       <a href="receta.html" class="activo">Lector de recetas</a>
       <a href="asistente.html">Asistente IA</a>
       <a href="citas.html">Citas</a>
@@ -53,6 +52,14 @@
       <div id="tablaReceta"></div>
       <h2 style="margin-top:18px">Explicación sencilla</h2>
       <p id="resumenReceta" style="white-space:pre-wrap"></p>
+      <h2 style="margin-top:18px">Guardar en tu expediente</h2>
+      <p class="sub">Guarda tu receta en Ópticas Luisa: así comparamos tu graduación en cada visita y detectamos cambios a tiempo.</p>
+      <div style="display:grid;gap:10px;max-width:420px">
+        <input type="text" id="expNombre" placeholder="Nombre completo" />
+        <input type="tel" id="expTelefono" placeholder="Teléfono (10 dígitos)" />
+        <button id="btnGuardarExp" class="boton">Guardar receta en mi expediente</button>
+        <p id="estadoExp" class="sub"></p>
+      </div>
       <a class="boton" href="probador.html">Elegir armazón en el probador</a>
       <a class="boton secundario" href="asistente.html" style="margin-left:8px">Cotizar con la asistente</a>
     </section>

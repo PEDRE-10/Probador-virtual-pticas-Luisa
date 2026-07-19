@@ -1,8 +1,8 @@
 # Ópticas Luisa — Plataforma con Inteligencia Artificial
 
 Plataforma web para **Ópticas Luisa** que integra inteligencia artificial en la experiencia
-del cliente y en la operación del negocio: probador virtual con detección facial, pre-examen
-visual en línea, lector de recetas con visión artificial, asistente conversacional y panel
+del cliente y en la operación del negocio: probador virtual con detección facial, lector de
+recetas con visión artificial, asistente conversacional, agenda de citas en línea y panel
 administrativo con pronósticos.
 
 ## Módulos
@@ -10,7 +10,6 @@ administrativo con pronósticos.
 | Módulo | Página | Tecnología de IA |
 |---|---|---|
 | **Probador virtual** | `probador.html` | Detección facial en tiempo real (MediaPipe Face Landmarker): superpone armazones sobre el rostro, clasifica la forma de la cara (ovalado, redondo, cuadrado, corazón, alargado) y estima la **distancia pupilar** usando el diámetro del iris como referencia métrica. |
-| **Pre-examen visual** | `examen.html` | Pruebas orientativas con calibración de pantalla (tarjeta bancaria): agudeza visual con E de Snellen, abanico de astigmatismo, láminas de color generadas por código y sensibilidad al contraste. Genera un reporte imprimible. |
 | **Lector de recetas** | `receta.html` | Visión artificial de **Claude** con salida estructurada (JSON Schema): extrae esfera, cilindro, eje, adición y DP de una foto, y explica la graduación en lenguaje sencillo. |
 | **Asistente virtual "Luisa"** | `asistente.html` | Chat con **Claude** (`claude-opus-4-8`): dudas sobre lentes y tratamientos, recomendaciones por forma de rostro y agendado de citas. Con caché de prompt para reducir costos. |
 | **Agenda de citas** | `citas.html` | Reserva en línea con disponibilidad real por horario. La asistente "Luisa" también puede **agendar citas por sí misma desde el chat** mediante herramientas de IA (tool use): consulta horarios libres y registra la cita confirmada. |
@@ -21,7 +20,7 @@ administrativo con pronósticos.
 - Node.js 18 o superior.
 - Una clave de la API de Anthropic (para el asistente, el lector de recetas y las
   recomendaciones personalizadas). **Sin clave, el resto de la plataforma funciona igual**
-  (probador, pre-examen y panel usan IA local en el navegador o datos de demostración).
+  (probador, citas y panel usan IA local en el navegador o datos de demostración).
 
 ## Instalación y arranque
 
@@ -41,7 +40,6 @@ server/citas.js        Agenda: disponibilidad, validaciones y almacenamiento (se
 public/                Interfaz web (HTML/CSS/JS sin frameworks)
   js/probador.js       Detección facial, forma de rostro, distancia pupilar
   js/monturas.js       Catálogo paramétrico de armazones (se dibujan sobre el rostro)
-  js/examen.js         Pre-examen visual de 5 pruebas
   js/asistente.js      Chat con la asistente
   js/receta.js         Carga/compresión de foto y lectura de receta
   js/admin.js          KPIs, gráficas SVG, pronósticos y alertas
@@ -51,8 +49,8 @@ public/                Interfaz web (HTML/CSS/JS sin frameworks)
 
 - El video del probador virtual se procesa **en el navegador**; no se envía a ningún servidor.
 - Las fotos de recetas se envían al servidor únicamente para su lectura con la API de Claude.
-- El pre-examen visual es **orientativo** y no sustituye un examen profesional; la interfaz lo
-  indica en todo momento.
+- La asistente "Luisa" opera con reglas estrictas de confidencialidad: no revela nombres del
+  personal, datos de otros clientes ni información interna del negocio, y no da diagnósticos.
 - El panel administrativo usa datos de demostración; el siguiente paso es conectarlo al punto
   de venta real.
 
@@ -62,8 +60,9 @@ public/                Interfaz web (HTML/CSS/JS sin frameworks)
    el pronóstico y las alertas operen sobre datos vivos.
 2. ~~**Agenda inteligente**: agendado real de citas desde el chat.~~ ✅ Hecho — falta añadir
    confirmaciones automáticas por WhatsApp y sincronización con un calendario externo.
-3. **Historial clínico digital**: expediente por cliente con recetas digitalizadas y
-   comparación automática de graduaciones entre visitas.
+3. ~~**Historial clínico digital**: expediente por cliente con recetas digitalizadas y
+   comparación automática de graduaciones entre visitas.~~ ✅ Hecho (`expedientes.html`) —
+   siguiente paso: autenticación de personal para proteger los datos clínicos.
 4. **Recomendador con fotos reales**: fotografiar el catálogo físico de armazones y
    renderizarlos en el probador (hoy son modelos vectoriales).
 5. **Campañas automáticas**: segmentación de clientes con IA (frecuencia, ticket, tipo de

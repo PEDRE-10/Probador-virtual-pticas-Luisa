@@ -7,6 +7,7 @@
   const btnLeer = document.getElementById("btnLeer");
   const estado = document.getElementById("estadoReceta");
   let imagenBase64 = null;
+  let recetaActual = null;
 
   zona.addEventListener("click", () => archivo.click());
   zona.addEventListener("dragover", (e) => { e.preventDefault(); zona.classList.add("encima"); });
@@ -98,7 +99,33 @@
       ${rec.observaciones ? `<p class="sub">Observaciones: ${rec.observaciones}</p>` : ""}`;
     document.getElementById("resumenReceta").textContent = rec.resumen || "";
     document.getElementById("resultado").classList.remove("oculto");
+    recetaActual = rec;
+    if (rec.paciente) document.getElementById("expNombre").value = rec.paciente;
     // Guardar localmente para que el cliente la reutilice en el probador o el chat
     localStorage.setItem("opticasLuisa.receta", JSON.stringify(rec));
   }
+
+  // Guardado de la receta en el expediente clínico del cliente
+  document.getElementById("btnGuardarExp").addEventListener("click", async () => {
+    const estadoExp = document.getElementById("estadoExp");
+    if (!recetaActual) return;
+    estadoExp.textContent = "Guardando…";
+    try {
+      const r = await fetch("/api/expedientes/receta", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nombre: document.getElementById("expNombre").value,
+          telefono: document.getElementById("expTelefono").value,
+          receta: recetaActual
+        })
+      });
+      const datos = await r.json();
+      estadoExp.textContent = datos.error
+        ? datos.error
+        : `✅ Guardada. Tu expediente ya tiene ${datos.totalRecetas} receta(s) registradas.`;
+    } catch {
+      estadoExp.textContent = "No se pudo contactar al servidor.";
+    }
+  });
 })();
