@@ -51,6 +51,10 @@ public/                Interfaz web (HTML/CSS/JS sin frameworks)
 - Las fotos de recetas se envían al servidor únicamente para su lectura con la API de Claude.
 - La asistente "Luisa" opera con reglas estrictas de confidencialidad: no revela nombres del
   personal, datos de otros clientes ni información interna del negocio, y no da diagnósticos.
+- **Las graduaciones almacenadas no están a disposición del cliente**: los expedientes
+  clínicos y la lista de citas solo se consultan con la clave de administrador
+  (`ADMIN_CLAVE` en `.env`), la asistente tiene prohibido dictarlas por chat y el navegador
+  del cliente no guarda copia de la receta digitalizada.
 - El panel administrativo usa datos de demostración; el siguiente paso es conectarlo al punto
   de venta real.
 

@@ -4,6 +4,25 @@
   const lista = document.getElementById("listaClientes");
   const detalle = document.getElementById("detalle");
 
+  // Acceso solo para personal: la clave se pide una vez por sesión del navegador.
+  function claveAdmin(renovar = false) {
+    if (renovar) sessionStorage.removeItem("opticasLuisa.claveAdmin");
+    let clave = sessionStorage.getItem("opticasLuisa.claveAdmin");
+    if (!clave) {
+      clave = window.prompt("Clave de administrador de Ópticas Luisa:") || "";
+      sessionStorage.setItem("opticasLuisa.claveAdmin", clave);
+    }
+    return clave;
+  }
+
+  async function fetchAdmin(url) {
+    let r = await fetch(url, { headers: { "x-clave-admin": claveAdmin() } });
+    if (r.status === 401) {
+      r = await fetch(url, { headers: { "x-clave-admin": claveAdmin(true) } });
+    }
+    return r;
+  }
+
   function celda(v) {
     return v == null || v === "" ? "—" : v;
   }
@@ -15,7 +34,11 @@
 
   async function cargarLista() {
     try {
-      const r = await fetch("/api/expedientes");
+      const r = await fetchAdmin("/api/expedientes");
+      if (r.status === 401) {
+        lista.innerHTML = `<p class="sub" style="color:var(--alerta)">Clave incorrecta. Recarga la página para intentarlo de nuevo.</p>`;
+        return;
+      }
       const { expedientes } = await r.json();
       if (!expedientes.length) {
         lista.innerHTML = `<p class="sub">Aún no hay expedientes. Se crean cuando un cliente guarda su
@@ -46,7 +69,7 @@
   }
 
   async function cargarDetalle(id) {
-    const r = await fetch(`/api/expedientes/${id}`);
+    const r = await fetchAdmin(`/api/expedientes/${id}`);
     const c = await r.json();
     if (c.error) return;
     const filasRecetas = c.recetas

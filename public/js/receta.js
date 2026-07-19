@@ -101,8 +101,8 @@
     document.getElementById("resultado").classList.remove("oculto");
     recetaActual = rec;
     if (rec.paciente) document.getElementById("expNombre").value = rec.paciente;
-    // Guardar localmente para que el cliente la reutilice en el probador o el chat
-    localStorage.setItem("opticasLuisa.receta", JSON.stringify(rec));
+    // Nota: la receta no se guarda en el navegador del cliente por política de
+    // la óptica; solo queda en el expediente interno si el cliente la registra.
   }
 
   // Guardado de la receta en el expediente clínico del cliente

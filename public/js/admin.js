@@ -255,11 +255,27 @@
       <tbody>${filasInv}</tbody>
     </table>`;
 
-  // ---------- Próximas citas (reales, desde el servidor) ----------
+  // ---------- Próximas citas (reales, desde el servidor; solo personal) ----------
   (async function tablaCitas() {
     const cont = document.getElementById("tablaCitas");
+    function claveAdmin(renovar = false) {
+      if (renovar) sessionStorage.removeItem("opticasLuisa.claveAdmin");
+      let clave = sessionStorage.getItem("opticasLuisa.claveAdmin");
+      if (!clave) {
+        clave = window.prompt("Clave de administrador para ver las citas:") || "";
+        sessionStorage.setItem("opticasLuisa.claveAdmin", clave);
+      }
+      return clave;
+    }
     try {
-      const r = await fetch("/api/citas");
+      let r = await fetch("/api/citas", { headers: { "x-clave-admin": claveAdmin() } });
+      if (r.status === 401) {
+        r = await fetch("/api/citas", { headers: { "x-clave-admin": claveAdmin(true) } });
+      }
+      if (r.status === 401) {
+        cont.innerHTML = `<p class="sub" style="color:var(--alerta)">Sección protegida: clave incorrecta. Recarga la página para reintentar.</p>`;
+        return;
+      }
       const { citas } = await r.json();
       if (!citas.length) {
         cont.innerHTML = `<p class="sub">Aún no hay citas próximas registradas.</p>`;
