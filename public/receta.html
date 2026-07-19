@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lector de recetas — Ópticas Luisa</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👓</text></svg>" />
+  <link rel="stylesheet" href="css/estilos.css" />
+  <style>
+    #zonaSoltar {
+      border: 2px dashed var(--linea); border-radius: 14px; padding: 36px 20px;
+      text-align: center; color: var(--tinta-2); cursor: pointer; transition: border-color 0.15s;
+    }
+    #zonaSoltar.encima, #zonaSoltar:hover { border-color: var(--acento); color: var(--acento); }
+    #vistaPrevia { max-width: 100%; max-height: 300px; border-radius: 10px; display: block; margin: 14px auto; }
+  </style>
+</head>
+<body>
+  <header class="sitio">
+    <a class="logo" href="index.html">Ópticas <span>Luisa</span></a>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="probador.html">Probador virtual</a>
+      <a href="examen.html">Pre-examen visual</a>
+      <a href="receta.html" class="activo">Lector de recetas</a>
+      <a href="asistente.html">Asistente IA</a>
+      <a href="admin.html">Panel administrativo</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Lector de recetas con IA</h1>
+    <p class="sub">
+      Toma una foto clara de tu receta oftálmica y la visión artificial extraerá tu graduación
+      y te la explicará en palabras sencillas.
+    </p>
+
+    <div class="tarjeta">
+      <div id="zonaSoltar">
+        📷 Arrastra aquí la foto de tu receta o <strong>haz clic para elegirla</strong>
+        <input type="file" id="archivo" accept="image/jpeg,image/png,image/webp" class="oculto" />
+      </div>
+      <img id="vistaPrevia" class="oculto" alt="Vista previa de la receta" />
+      <div style="text-align:center">
+        <button id="btnLeer" class="boton oculto">Leer receta con IA</button>
+      </div>
+      <p id="estadoReceta" class="sub" style="text-align:center"></p>
+    </div>
+
+    <section id="resultado" class="tarjeta oculto" style="margin-top:18px">
+      <h2>Tu graduación</h2>
+      <div id="tablaReceta"></div>
+      <h2 style="margin-top:18px">Explicación sencilla</h2>
+      <p id="resumenReceta" style="white-space:pre-wrap"></p>
+      <a class="boton" href="probador.html">Elegir armazón en el probador</a>
+      <a class="boton secundario" href="asistente.html" style="margin-left:8px">Cotizar con la asistente</a>
+    </section>
+  </main>
+
+  <script src="js/receta.js"></script>
+</body>
+</html>

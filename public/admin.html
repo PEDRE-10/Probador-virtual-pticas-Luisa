@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel administrativo — Ópticas Luisa</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👓</text></svg>" />
+  <link rel="stylesheet" href="css/estilos.css" />
+  <style>
+    .kpis { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 18px; }
+    .kpi { background: var(--superficie); border: 1px solid var(--borde); border-radius: 14px; padding: 16px 18px; }
+    .kpi .titulo { color: var(--tinta-suave); font-size: 0.82rem; }
+    .kpi .valor { font-size: 1.7rem; font-weight: 700; margin: 2px 0; }
+    .kpi .delta { font-size: 0.85rem; font-weight: 600; }
+    .kpi .delta.sube { color: var(--exito); }
+    .kpi .delta.baja { color: var(--alerta); }
+    .grafica { position: relative; }
+    .grafica svg { width: 100%; height: auto; display: block; }
+    #tooltip {
+      position: fixed; pointer-events: none; z-index: 50; display: none;
+      background: var(--superficie); border: 1px solid var(--borde); border-radius: 8px;
+      padding: 6px 10px; font-size: 0.82rem; box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    }
+    .leyenda { display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.82rem; color: var(--tinta-2); margin-top: 8px; }
+    .leyenda span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; background: var(--c); }
+    .fila-alerta td:first-child { font-weight: 600; }
+  </style>
+</head>
+<body>
+  <header class="sitio">
+    <a class="logo" href="index.html">Ópticas <span>Luisa</span></a>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="probador.html">Probador virtual</a>
+      <a href="examen.html">Pre-examen visual</a>
+      <a href="receta.html">Lector de recetas</a>
+      <a href="asistente.html">Asistente IA</a>
+      <a href="admin.html" class="activo">Panel administrativo</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Panel administrativo inteligente</h1>
+    <p class="sub">
+      Demostración con datos de ejemplo: indicadores del negocio, pronóstico de ventas,
+      alertas de inventario y recordatorios automáticos de renovación para clientes.
+    </p>
+
+    <div class="kpis" id="kpis"></div>
+
+    <div class="cuadricula">
+      <section class="tarjeta grafica" style="grid-column: 1 / -1">
+        <h2>Ventas diarias y pronóstico (7 días)</h2>
+        <div id="graficaVentas"></div>
+        <div class="leyenda">
+          <span style="--c: var(--serie-1)">Ventas reales</span>
+          <span style="--c: var(--serie-2)">Pronóstico IA</span>
+        </div>
+      </section>
+
+      <section class="tarjeta grafica">
+        <h2>Ventas del mes por categoría</h2>
+        <div id="graficaCategorias"></div>
+      </section>
+
+      <section class="tarjeta">
+        <h2>⚠️ Alertas de inventario (predicción)</h2>
+        <p class="sub">Días estimados para agotar existencias según el ritmo de venta.</p>
+        <div id="tablaInventario"></div>
+      </section>
+
+      <section class="tarjeta" style="grid-column: 1 / -1">
+        <h2>🔔 Clientes por contactar (renovación de lentes)</h2>
+        <p class="sub">
+          Clientes cuyo último examen tiene más de 11 meses. El sistema genera el mensaje
+          de recordatorio listo para enviar por WhatsApp.
+        </p>
+        <div id="tablaRecall"></div>
+      </section>
+    </div>
+
+    <div id="tooltip"></div>
+  </main>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>

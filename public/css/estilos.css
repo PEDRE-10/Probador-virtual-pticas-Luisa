@@ -1,0 +1,152 @@
+/* Estilos compartidos de la plataforma Ópticas Luisa */
+:root {
+  color-scheme: light dark;
+  --plano: #f9f9f7;
+  --superficie: #fcfcfb;
+  --tinta: #0b0b0b;
+  --tinta-2: #52514e;
+  --tinta-suave: #898781;
+  --linea: #e1e0d9;
+  --borde: rgba(11, 11, 11, 0.1);
+  --acento: #2a78d6;
+  --acento-fuerte: #1c5cab;
+  --exito: #006300;
+  --alerta: #d03b3b;
+  --serie-1: #2a78d6;
+  --serie-2: #008300;
+  --serie-3: #e87ba4;
+  --serie-4: #eda100;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --plano: #0d0d0d;
+    --superficie: #1a1a19;
+    --tinta: #ffffff;
+    --tinta-2: #c3c2b7;
+    --tinta-suave: #898781;
+    --linea: #2c2c2a;
+    --borde: rgba(255, 255, 255, 0.1);
+    --acento: #3987e5;
+    --acento-fuerte: #6da7ec;
+    --exito: #0ca30c;
+    --alerta: #e66767;
+    --serie-1: #3987e5;
+    --serie-2: #008300;
+    --serie-3: #d55181;
+    --serie-4: #c98500;
+  }
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--plano);
+  color: var(--tinta);
+  line-height: 1.55;
+}
+a { color: var(--acento); }
+
+header.sitio {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 14px 24px;
+  background: var(--superficie);
+  border-bottom: 1px solid var(--linea);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+header.sitio .logo {
+  font-weight: 700;
+  font-size: 1.15rem;
+  text-decoration: none;
+  color: var(--tinta);
+}
+header.sitio .logo span { color: var(--acento); }
+header.sitio nav { display: flex; gap: 4px; flex-wrap: wrap; }
+header.sitio nav a {
+  text-decoration: none;
+  color: var(--tinta-2);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.92rem;
+}
+header.sitio nav a:hover { background: var(--plano); color: var(--tinta); }
+header.sitio nav a.activo { background: var(--acento); color: #fff; }
+
+main { max-width: 1080px; margin: 0 auto; padding: 28px 20px 64px; }
+
+.tarjeta {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  padding: 20px;
+}
+.cuadricula {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+h1 { font-size: 1.7rem; margin: 0 0 6px; }
+h2 { font-size: 1.2rem; }
+p.sub { color: var(--tinta-2); margin-top: 0; }
+
+.boton {
+  display: inline-block;
+  border: 0;
+  background: var(--acento);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+.boton:hover { background: var(--acento-fuerte); }
+.boton.secundario {
+  background: transparent;
+  color: var(--acento);
+  border: 1px solid var(--acento);
+}
+.boton:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.aviso {
+  border-left: 4px solid var(--serie-4);
+  background: var(--superficie);
+  border-radius: 0 10px 10px 0;
+  padding: 10px 14px;
+  color: var(--tinta-2);
+  font-size: 0.9rem;
+}
+.etiqueta {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--acento);
+}
+.oculto { display: none !important; }
+
+table.datos { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+table.datos th, table.datos td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--linea);
+}
+table.datos th { color: var(--tinta-suave); font-weight: 600; }
+table.datos td.num { font-variant-numeric: tabular-nums; text-align: right; }
+
+input[type="text"], input[type="tel"], textarea, select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--linea);
+  border-radius: 10px;
+  background: var(--superficie);
+  color: var(--tinta);
+  font: inherit;
+}

@@ -1,0 +1,20 @@
+{
+  "name": "opticas-luisa-ia",
+  "version": "1.0.0",
+  "description": "Plataforma de inteligencia artificial para Ópticas Luisa: probador virtual, exámenes visuales, asistente con IA, lector de recetas y panel administrativo inteligente.",
+  "main": "server/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.112.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  },
+  "license": "MIT"
+}

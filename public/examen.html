@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pre-examen visual — Ópticas Luisa</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👓</text></svg>" />
+  <link rel="stylesheet" href="css/estilos.css" />
+  <style>
+    .paso { display: none; }
+    .paso.activo { display: block; }
+    .progreso { display: flex; gap: 6px; margin: 14px 0 22px; }
+    .progreso span { flex: 1; height: 6px; border-radius: 3px; background: var(--linea); }
+    .progreso span.hecho { background: var(--acento); }
+    #tarjetaCalibre { background: #fff; border: 2px solid var(--acento); border-radius: 8px; height: 108px; margin: 12px auto; display:flex; align-items:center; justify-content:center; color:#333; font-size: 0.85rem; }
+    .optotipo { display: flex; align-items: center; justify-content: center; min-height: 220px; }
+    .flechas { display: grid; grid-template-columns: repeat(3, 64px); gap: 8px; justify-content: center; margin-top: 14px; }
+    .flechas button { font-size: 1.4rem; padding: 12px 0; border-radius: 10px; border: 1px solid var(--linea); background: var(--superficie); color: var(--tinta); cursor: pointer; }
+    .flechas button:hover { border-color: var(--acento); }
+    .placa { display: block; margin: 0 auto 12px; border-radius: 50%; }
+    .respuesta-corta { display: flex; gap: 8px; justify-content: center; margin-top: 10px; }
+    .respuesta-corta input { max-width: 140px; text-align: center; font-size: 1.2rem; }
+  </style>
+</head>
+<body>
+  <header class="sitio">
+    <a class="logo" href="index.html">Ópticas <span>Luisa</span></a>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="probador.html">Probador virtual</a>
+      <a href="examen.html" class="activo">Pre-examen visual</a>
+      <a href="receta.html">Lector de recetas</a>
+      <a href="asistente.html">Asistente IA</a>
+      <a href="admin.html">Panel administrativo</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Pre-examen visual en línea</h1>
+    <p class="sub">Cinco pruebas rápidas y orientativas. Al final obtienes un reporte para llevar a tu cita.</p>
+    <p class="aviso">Este pre-examen <strong>no</strong> sustituye un examen profesional de la vista. Si notas cambios bruscos en tu visión, acude de inmediato con un especialista.</p>
+
+    <div class="progreso" id="progreso"></div>
+
+    <!-- Paso 0: calibración -->
+    <section class="tarjeta paso activo" id="paso0">
+      <h2>1 · Calibración de pantalla</h2>
+      <p>Coloca una tarjeta bancaria sobre el rectángulo y mueve el control hasta que coincidan en anchura. Así conocemos el tamaño real de tu pantalla.</p>
+      <div id="tarjetaCalibre">≈ tarjeta bancaria (85.6 mm)</div>
+      <input type="range" id="calibre" min="180" max="520" value="320" style="width:100%" />
+      <p class="sub">Después colócate a <strong>un brazo de distancia</strong> de la pantalla (unos 60 cm).</p>
+      <button class="boton" data-siguiente>Listo, continuar</button>
+    </section>
+
+    <!-- Paso 1: agudeza -->
+    <section class="tarjeta paso" id="paso1">
+      <h2>2 · Agudeza visual</h2>
+      <p>Indica hacia dónde apuntan las patitas de la <strong>E</strong>. Si usas lentes, hazlo con ellos puestos. Cúbrete un ojo si quieres evaluar cada ojo por separado.</p>
+      <div class="optotipo"><canvas id="lienzoE" width="260" height="200"></canvas></div>
+      <div class="flechas">
+        <span></span><button data-dir="arriba">▲</button><span></span>
+        <button data-dir="izquierda">◀</button><button data-dir="abajo">▼</button><button data-dir="derecha">▶</button>
+      </div>
+      <p class="sub" id="infoAgudeza"></p>
+    </section>
+
+    <!-- Paso 2: astigmatismo -->
+    <section class="tarjeta paso" id="paso2">
+      <h2>3 · Prueba de astigmatismo</h2>
+      <p>Observa el abanico (con un ojo tapado, sin entrecerrar). ¿Todas las líneas se ven <em>igual de negras y nítidas</em>?</p>
+      <svg id="abanico" width="260" height="260" viewBox="-130 -130 260 260" style="display:block;margin:0 auto"></svg>
+      <div class="respuesta-corta">
+        <button class="boton secundario" data-astig="no">Sí, todas iguales</button>
+        <button class="boton secundario" data-astig="si">No, algunas más oscuras</button>
+      </div>
+    </section>
+
+    <!-- Paso 3: percepción de color -->
+    <section class="tarjeta paso" id="paso3">
+      <h2>4 · Percepción de color</h2>
+      <p>Escribe el número que veas en el círculo. Si no ves ninguno, deja el campo vacío y presiona «Siguiente».</p>
+      <canvas id="placaColor" class="placa" width="240" height="240"></canvas>
+      <div class="respuesta-corta">
+        <input type="text" id="respColor" inputmode="numeric" maxlength="2" placeholder="¿Número?" />
+        <button class="boton" id="btnColor">Siguiente</button>
+      </div>
+      <p class="sub" id="infoColor"></p>
+    </section>
+
+    <!-- Paso 4: contraste -->
+    <section class="tarjeta paso" id="paso4">
+      <h2>5 · Sensibilidad al contraste</h2>
+      <p>Escribe la letra que aparece. Cada vez será más tenue; cuando ya no la distingas, presiona «No la veo».</p>
+      <div class="optotipo"><canvas id="lienzoContraste" width="220" height="160"></canvas></div>
+      <div class="respuesta-corta">
+        <input type="text" id="respContraste" maxlength="1" placeholder="¿Letra?" />
+        <button class="boton" id="btnContraste">Enviar</button>
+        <button class="boton secundario" id="btnNoVeo">No la veo</button>
+      </div>
+    </section>
+
+    <!-- Paso 5: resultados -->
+    <section class="tarjeta paso" id="paso5">
+      <h2>Tu reporte orientativo</h2>
+      <div id="reporte"></div>
+      <p class="aviso" style="margin-top:14px">Reporte orientativo generado en línea. Preséntalo en tu cita de Ópticas Luisa para un examen completo con optometrista.</p>
+      <button class="boton" onclick="window.print()" style="margin-top:12px">Imprimir / guardar PDF</button>
+      <a class="boton secundario" href="asistente.html" style="margin-left:8px">Agendar cita con la asistente</a>
+    </section>
+  </main>
+
+  <script src="js/examen.js"></script>
+</body>
+</html>
