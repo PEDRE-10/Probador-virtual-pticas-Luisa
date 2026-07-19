@@ -13,7 +13,8 @@ administrativo con pronósticos.
 | **Pre-examen visual** | `examen.html` | Pruebas orientativas con calibración de pantalla (tarjeta bancaria): agudeza visual con E de Snellen, abanico de astigmatismo, láminas de color generadas por código y sensibilidad al contraste. Genera un reporte imprimible. |
 | **Lector de recetas** | `receta.html` | Visión artificial de **Claude** con salida estructurada (JSON Schema): extrae esfera, cilindro, eje, adición y DP de una foto, y explica la graduación en lenguaje sencillo. |
 | **Asistente virtual "Luisa"** | `asistente.html` | Chat con **Claude** (`claude-opus-4-8`): dudas sobre lentes y tratamientos, recomendaciones por forma de rostro y agendado de citas. Con caché de prompt para reducir costos. |
-| **Panel administrativo** | `admin.html` | Pronóstico de ventas (tendencia por mínimos cuadrados + estacionalidad semanal), predicción de agotamiento de inventario y recall automático de clientes con mensajes de WhatsApp generados. |
+| **Agenda de citas** | `citas.html` | Reserva en línea con disponibilidad real por horario. La asistente "Luisa" también puede **agendar citas por sí misma desde el chat** mediante herramientas de IA (tool use): consulta horarios libres y registra la cita confirmada. |
+| **Panel administrativo** | `admin.html` | Pronóstico de ventas (tendencia por mínimos cuadrados + estacionalidad semanal), predicción de agotamiento de inventario, **próximas citas en vivo** y recall automático de clientes con mensajes de WhatsApp generados. |
 
 ## Requisitos
 
@@ -36,6 +37,7 @@ Para desarrollo con recarga automática: `npm run dev`.
 
 ```
 server/index.js        Servidor Express + endpoints de IA (/api/chat, /api/receta, /api/recomendacion)
+server/citas.js        Agenda: disponibilidad, validaciones y almacenamiento (server/datos/citas.json)
 public/                Interfaz web (HTML/CSS/JS sin frameworks)
   js/probador.js       Detección facial, forma de rostro, distancia pupilar
   js/monturas.js       Catálogo paramétrico de armazones (se dibujan sobre el rostro)
@@ -58,8 +60,8 @@ public/                Interfaz web (HTML/CSS/JS sin frameworks)
 
 1. **Conexión al punto de venta**: alimentar el panel con ventas e inventario reales para que
    el pronóstico y las alertas operen sobre datos vivos.
-2. **Agenda inteligente**: agendado real de citas desde el chat (calendario + confirmaciones
-   automáticas por WhatsApp).
+2. ~~**Agenda inteligente**: agendado real de citas desde el chat.~~ ✅ Hecho — falta añadir
+   confirmaciones automáticas por WhatsApp y sincronización con un calendario externo.
 3. **Historial clínico digital**: expediente por cliente con recetas digitalizadas y
    comparación automática de graduaciones entre visitas.
 4. **Recomendador con fotos reales**: fotografiar el catálogo físico de armazones y

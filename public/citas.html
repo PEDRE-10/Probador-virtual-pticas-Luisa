@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agendar cita — Ópticas Luisa</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👓</text></svg>" />
+  <link rel="stylesheet" href="css/estilos.css" />
+  <style>
+    .dias, .horas { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0 18px; }
+    .dias button, .horas button {
+      border: 1px solid var(--linea); background: var(--superficie); color: var(--tinta);
+      border-radius: 10px; padding: 8px 12px; cursor: pointer; font: inherit; font-size: 0.88rem;
+    }
+    .dias button small { display: block; color: var(--tinta-suave); }
+    .dias button.activo, .horas button.activo { border-color: var(--acento); outline: 2px solid var(--acento); }
+    .horas button:disabled { opacity: 0.35; cursor: not-allowed; text-decoration: line-through; }
+    form.datos-cita { display: grid; gap: 12px; max-width: 440px; }
+    #confirmacion { border-left: 4px solid var(--exito); }
+  </style>
+</head>
+<body>
+  <header class="sitio">
+    <a class="logo" href="index.html">Ópticas <span>Luisa</span></a>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="probador.html">Probador virtual</a>
+      <a href="examen.html">Pre-examen visual</a>
+      <a href="receta.html">Lector de recetas</a>
+      <a href="asistente.html">Asistente IA</a>
+      <a href="citas.html" class="activo">Citas</a>
+      <a href="admin.html">Panel administrativo</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Agenda tu cita</h1>
+    <p class="sub">
+      Elige día y horario, o si lo prefieres <a href="asistente.html">pídele a la asistente
+      "Luisa"</a> que la agende por ti desde el chat.
+    </p>
+
+    <div class="tarjeta">
+      <h2>1 · Elige el día</h2>
+      <div class="dias" id="dias"></div>
+
+      <h2>2 · Elige la hora</h2>
+      <p class="sub" id="estadoHoras">Selecciona primero un día.</p>
+      <div class="horas" id="horas"></div>
+
+      <h2>3 · Tus datos</h2>
+      <form class="datos-cita" id="formCita">
+        <input type="text" id="nombre" placeholder="Nombre completo" required minlength="3" />
+        <input type="tel" id="telefono" placeholder="Teléfono (10 dígitos)" required />
+        <select id="servicio" required>
+          <option value="examen de la vista">Examen de la vista</option>
+          <option value="adaptación de lentes de contacto">Adaptación de lentes de contacto</option>
+          <option value="ajuste de armazón">Ajuste de armazón</option>
+          <option value="entrega de lentes">Entrega de lentes</option>
+        </select>
+        <button type="submit" class="boton" id="btnAgendar" disabled>Confirmar cita</button>
+      </form>
+      <p id="errorCita" class="sub" style="color:var(--alerta)"></p>
+    </div>
+
+    <div class="tarjeta oculto" id="confirmacion" style="margin-top:18px">
+      <h2>✅ ¡Cita confirmada!</h2>
+      <p id="resumenCita"></p>
+      <p class="sub">Te esperamos en sucursal. Si necesitas cambiarla, contáctanos o dile a la asistente.</p>
+    </div>
+  </main>
+
+  <script src="js/citas.js"></script>
+</body>
+</html>

@@ -255,6 +255,33 @@
       <tbody>${filasInv}</tbody>
     </table>`;
 
+  // ---------- Próximas citas (reales, desde el servidor) ----------
+  (async function tablaCitas() {
+    const cont = document.getElementById("tablaCitas");
+    try {
+      const r = await fetch("/api/citas");
+      const { citas } = await r.json();
+      if (!citas.length) {
+        cont.innerHTML = `<p class="sub">Aún no hay citas próximas registradas.</p>`;
+        return;
+      }
+      cont.innerHTML = `
+        <table class="datos">
+          <thead><tr><th>Fecha</th><th>Hora</th><th>Cliente</th><th>Teléfono</th><th>Servicio</th></tr></thead>
+          <tbody>${citas
+            .map((c) => {
+              const f = new Date(c.fecha + "T12:00:00").toLocaleDateString("es-MX", {
+                weekday: "short", day: "numeric", month: "short"
+              });
+              return `<tr><td>${f}</td><td class="num">${c.hora}</td><td>${c.nombre}</td><td>${c.telefono}</td><td>${c.servicio}</td></tr>`;
+            })
+            .join("")}</tbody>
+        </table>`;
+    } catch {
+      cont.innerHTML = `<p class="sub">No se pudieron cargar las citas.</p>`;
+    }
+  })();
+
   // ---------- Recall de clientes ----------
   const filasRecall = clientes
     .map((c) => {

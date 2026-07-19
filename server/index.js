@@ -5,6 +5,7 @@ import express from "express";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import Anthropic from "@anthropic-ai/sdk";
+import { leerCitas, disponibilidad, agendar, HORARIOS, SERVICIOS } from "./citas.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -24,7 +25,7 @@ const SISTEMA_ASISTENTE = `Eres "Luisa", la asistente virtual de Ópticas Luisa,
 Tu trabajo:
 - Orientar sobre tipos de lentes (monofocales, bifocales, progresivos), tratamientos (antirreflejante, fotocromático, filtro de luz azul), armazones y lentes de contacto.
 - Explicar en lenguaje sencillo términos de recetas oftálmicas (esfera, cilindro, eje, adición, distancia pupilar).
-- Ayudar a agendar una cita: pide nombre, teléfono y horario preferido, y confirma que un asesor se comunicará.
+- Agendar citas reales: tienes herramientas para consultar horarios disponibles y registrar la cita. Antes de agendar reúne nombre completo, teléfono, servicio y fecha/hora deseada; confirma los datos con el cliente y después usa la herramienta. Tras agendar, repite al cliente el día, la hora y el servicio confirmados.
 - Recomendar armazones según la forma del rostro (ovalado, redondo, cuadrado, corazón, alargado).
 - Responder siempre en español, con calidez y brevedad.
 
@@ -78,6 +79,52 @@ const ESQUEMA_RECETA = {
   additionalProperties: false
 };
 
+// Herramientas que la asistente puede usar durante la conversación.
+const HERRAMIENTAS_CHAT = [
+  {
+    name: "consultar_disponibilidad",
+    description:
+      "Consulta los horarios libres para citas en la sucursal en una fecha dada. " +
+      "Úsala antes de proponer horarios al cliente.",
+    input_schema: {
+      type: "object",
+      properties: {
+        fecha: { type: "string", description: "Fecha en formato AAAA-MM-DD" }
+      },
+      required: ["fecha"],
+      additionalProperties: false
+    }
+  },
+  {
+    name: "agendar_cita",
+    description:
+      "Registra una cita real en la agenda de la sucursal. Úsala solo después de " +
+      "confirmar con el cliente su nombre, teléfono, servicio, fecha y hora.",
+    input_schema: {
+      type: "object",
+      properties: {
+        nombre: { type: "string", description: "Nombre completo del cliente" },
+        telefono: { type: "string", description: "Teléfono de contacto" },
+        servicio: { type: "string", enum: SERVICIOS },
+        fecha: { type: "string", description: "Fecha AAAA-MM-DD" },
+        hora: { type: "string", enum: HORARIOS }
+      },
+      required: ["nombre", "telefono", "servicio", "fecha", "hora"],
+      additionalProperties: false
+    }
+  }
+];
+
+async function ejecutarHerramienta(nombre, entrada) {
+  if (nombre === "consultar_disponibilidad") {
+    return JSON.stringify(await disponibilidad(entrada.fecha));
+  }
+  if (nombre === "agendar_cita") {
+    return JSON.stringify(await agendar(entrada));
+  }
+  return JSON.stringify({ error: "Herramienta desconocida." });
+}
+
 function limpiarHistorial(mensajes) {
   if (!Array.isArray(mensajes)) return [];
   return mensajes
@@ -108,19 +155,46 @@ app.post("/api/chat", async (req, res) => {
     });
   }
   try {
-    const respuesta = await client.messages.create({
-      model: MODELO,
-      max_tokens: 1024,
-      thinking: { type: "adaptive" },
-      system: [
-        {
-          type: "text",
-          text: SISTEMA_ASISTENTE,
-          cache_control: { type: "ephemeral" }
+    const conversacion = [...mensajes];
+    let respuesta;
+    // Bucle de herramientas: la asistente puede consultar la agenda y
+    // registrar citas antes de dar su respuesta final.
+    for (let vuelta = 0; vuelta < 5; vuelta++) {
+      respuesta = await client.messages.create({
+        model: MODELO,
+        max_tokens: 1024,
+        thinking: { type: "adaptive" },
+        system: [
+          {
+            type: "text",
+            text: SISTEMA_ASISTENTE,
+            cache_control: { type: "ephemeral" }
+          },
+          {
+            // Bloque volátil después del punto de caché: no invalida el prefijo.
+            type: "text",
+            text: `Hoy es ${new Date().toLocaleDateString("es-MX", {
+              weekday: "long", year: "numeric", month: "long", day: "numeric"
+            })}. Horarios de citas: ${HORARIOS.join(", ")}. Servicios: ${SERVICIOS.join(", ")}.`
+          }
+        ],
+        tools: HERRAMIENTAS_CHAT,
+        messages: conversacion
+      });
+      if (respuesta.stop_reason !== "tool_use") break;
+      conversacion.push({ role: "assistant", content: respuesta.content });
+      const resultados = [];
+      for (const bloque of respuesta.content) {
+        if (bloque.type === "tool_use") {
+          resultados.push({
+            type: "tool_result",
+            tool_use_id: bloque.id,
+            content: await ejecutarHerramienta(bloque.name, bloque.input)
+          });
         }
-      ],
-      messages: mensajes
-    });
+      }
+      conversacion.push({ role: "user", content: resultados });
+    }
     if (respuesta.stop_reason === "refusal") {
       return res.json({
         respuesta:
@@ -223,6 +297,27 @@ app.post("/api/recomendacion", async (req, res) => {
     console.error("Error en /api/recomendacion:", err);
     res.status(502).json({ error: "No se pudo generar la recomendación." });
   }
+});
+
+// ---------- Agenda de citas ----------
+app.get("/api/citas/disponibilidad", async (req, res) => {
+  const r = await disponibilidad(String(req.query.fecha || ""));
+  res.status(r.error ? 400 : 200).json(r);
+});
+
+app.post("/api/citas", async (req, res) => {
+  const r = await agendar(req.body || {});
+  res.status(r.error ? 400 : 201).json(r);
+});
+
+app.get("/api/citas", async (_req, res) => {
+  const citas = await leerCitas();
+  const hoy = new Date().toISOString().slice(0, 10);
+  res.json({
+    citas: citas
+      .filter((c) => c.fecha >= hoy)
+      .sort((a, b) => (a.fecha + a.hora).localeCompare(b.fecha + b.hora))
+  });
 });
 
 // Estado del servidor (para que el frontend sepa si la IA está activa).
