@@ -389,6 +389,47 @@ app.get("/api/expedientes/:id", requiereAdmin, async (req, res) => {
   res.status(r.error ? 404 : 200).json(r);
 });
 
+// ---------- Informe ejecutivo con IA (solo personal) ----------
+app.post("/api/informe", requiereAdmin, async (req, res) => {
+  if (!iaDisponible) {
+    return res.json({
+      offline: true,
+      error: "El informe con IA requiere configurar ANTHROPIC_API_KEY en el servidor."
+    });
+  }
+  const datos = req.body?.datos;
+  if (!datos || typeof datos !== "object") {
+    return res.status(400).json({ error: "Faltan los datos del negocio." });
+  }
+  try {
+    const respuesta = await client.messages.create({
+      model: MODELO,
+      max_tokens: 900,
+      thinking: { type: "adaptive" },
+      system:
+        "Eres el analista de negocio de Ópticas Luisa, una óptica mexicana. Redactas informes " +
+        "ejecutivos breves en español: qué va bien, qué requiere atención y 3 acciones concretas " +
+        "para la semana. Tono claro y directo, dirigido al dueño. Sin tecnicismos financieros.",
+      messages: [
+        {
+          role: "user",
+          content:
+            "Con estos datos de la semana, genera el informe ejecutivo (máximo 200 palabras):\n" +
+            JSON.stringify(datos).slice(0, 6000)
+        }
+      ]
+    });
+    const texto = respuesta.content
+      .filter((b) => b.type === "text")
+      .map((b) => b.text)
+      .join("\n");
+    res.json({ informe: texto });
+  } catch (err) {
+    console.error("Error en /api/informe:", err);
+    res.status(502).json({ error: "No se pudo generar el informe. Intenta de nuevo." });
+  }
+});
+
 // Estado del servidor (para que el frontend sepa si la IA está activa).
 app.get("/api/estado", (_req, res) => {
   res.json({ ia: iaDisponible, modelo: iaDisponible ? MODELO : null });

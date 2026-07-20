@@ -298,6 +298,52 @@
     }
   })();
 
+  // ---------- Informe ejecutivo con IA ----------
+  document.getElementById("btnInforme").addEventListener("click", async () => {
+    const btn = document.getElementById("btnInforme");
+    const seccion = document.getElementById("informeIA");
+    const salida = document.getElementById("textoInforme");
+    let clave = sessionStorage.getItem("opticasLuisa.claveAdmin");
+    if (!clave) {
+      clave = window.prompt("Clave de administrador:") || "";
+      sessionStorage.setItem("opticasLuisa.claveAdmin", clave);
+    }
+    btn.disabled = true;
+    seccion.classList.remove("oculto");
+    salida.textContent = "Analizando la semana con IA…";
+    try {
+      const r = await fetch("/api/informe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-clave-admin": clave },
+        body: JSON.stringify({
+          datos: {
+            ventasUltimos7Dias: semanaActual,
+            ventasSemanaPrevia: semanaPrevia,
+            cambioPorcentual: +deltaSemana.toFixed(1),
+            pronosticoProximos7Dias: proyeccionSemana,
+            ticketPromedio,
+            ventasMesPorCategoria: categorias,
+            inventarioCritico: inventario
+              .map((p) => ({ ...p, diasParaAgotarse: Math.floor(p.stock / p.ventaDiaria) }))
+              .filter((p) => p.diasParaAgotarse <= 14),
+            clientesPendientesDeRecall: clientes.length
+          }
+        })
+      });
+      if (r.status === 401) {
+        sessionStorage.removeItem("opticasLuisa.claveAdmin");
+        salida.textContent = "Clave incorrecta. Vuelve a intentarlo.";
+        return;
+      }
+      const datos = await r.json();
+      salida.textContent = datos.informe || datos.error || "Sin respuesta.";
+    } catch {
+      salida.textContent = "No se pudo contactar al servidor.";
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
   // ---------- Recall de clientes ----------
   const filasRecall = clientes
     .map((c) => {

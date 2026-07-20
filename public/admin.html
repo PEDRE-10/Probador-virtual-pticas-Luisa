@@ -45,7 +45,14 @@
       Demostración con datos de ejemplo: indicadores del negocio, pronóstico de ventas,
       alertas de inventario y recordatorios automáticos de renovación para clientes.
     </p>
-    <p><a class="boton secundario" href="expedientes.html">📁 Ver expedientes clínicos digitales</a></p>
+    <p>
+      <a class="boton secundario" href="expedientes.html">📁 Ver expedientes clínicos digitales</a>
+      <button class="boton" id="btnInforme" style="margin-left:8px">🧠 Generar informe semanal con IA</button>
+    </p>
+    <section class="tarjeta oculto" id="informeIA" style="margin-bottom:18px">
+      <h2>Informe ejecutivo de la semana</h2>
+      <p id="textoInforme" style="white-space:pre-wrap"></p>
+    </section>
 
     <div class="kpis" id="kpis"></div>
 

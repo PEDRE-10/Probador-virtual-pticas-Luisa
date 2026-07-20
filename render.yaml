@@ -1,0 +1,14 @@
+# Configuración de despliegue en Render (https://render.com)
+# Al conectar este repositorio en Render, este archivo configura todo solo.
+services:
+  - type: web
+    name: opticas-luisa
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false # se captura en el panel de Render (nunca en el código)
+      - key: ADMIN_CLAVE
+        sync: false

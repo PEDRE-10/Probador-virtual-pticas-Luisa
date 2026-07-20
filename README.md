@@ -45,6 +45,22 @@ public/                Interfaz web (HTML/CSS/JS sin frameworks)
   js/admin.js          KPIs, gráficas SVG, pronósticos y alertas
 ```
 
+## Publicar en internet (www.opticasluisa.com)
+
+El repositorio incluye `render.yaml` para desplegar en [Render](https://render.com):
+
+1. Crea una cuenta en render.com (con tu cuenta de GitHub).
+2. "New +" → "Blueprint" → conecta este repositorio; Render detecta `render.yaml` y configura todo.
+3. En el panel del servicio, agrega las variables de entorno `ANTHROPIC_API_KEY` y `ADMIN_CLAVE`.
+4. Al terminar tendrás una dirección tipo `https://opticas-luisa.onrender.com`.
+5. Para usar el dominio propio: en Render → Settings → Custom Domains agrega
+   `www.opticasluisa.com`, y en el proveedor donde compraste el dominio crea un registro
+   **CNAME** de `www` apuntando al valor que Render te indique.
+
+Nota del plan gratuito: el servidor "se duerme" tras 15 minutos sin visitas y la primera
+carga siguiente tarda ~30 segundos. Para tráfico real conviene el plan de pago de Render
+(~$7 USD/mes) o un VPS.
+
 ## Notas de privacidad y alcance
 
 - El video del probador virtual se procesa **en el navegador**; no se envía a ningún servidor.
