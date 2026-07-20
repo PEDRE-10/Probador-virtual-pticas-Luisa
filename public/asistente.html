@@ -3,20 +3,95 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Asistente IA — Ópticas Luisa</title>
+  <title>Luisa — Asistente IA de Ópticas Luisa</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👓</text></svg>" />
   <link rel="stylesheet" href="css/estilos.css" />
   <style>
-    #conversacion { display: flex; flex-direction: column; gap: 10px; min-height: 320px; max-height: 55vh; overflow-y: auto; padding: 4px; }
-    .burbuja { max-width: 78%; padding: 10px 14px; border-radius: 14px; white-space: pre-wrap; font-size: 0.95rem; }
-    .burbuja.usuario { align-self: flex-end; background: var(--acento); color: #fff; border-bottom-right-radius: 4px; }
-    .burbuja.asistente { align-self: flex-start; background: var(--superficie); border: 1px solid var(--linea); border-bottom-left-radius: 4px; }
-    .burbuja.escribiendo { color: var(--tinta-suave); font-style: italic; }
-    #formulario { display: flex; gap: 8px; margin-top: 14px; }
-    #entrada { flex: 1; }
-    .sugerencias { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
-    .sugerencias button { border: 1px dashed var(--linea); background: transparent; color: var(--tinta-2); border-radius: 999px; padding: 6px 12px; cursor: pointer; font-size: 0.85rem; }
-    .sugerencias button:hover { border-color: var(--acento); color: var(--acento); }
+    /* ---------- Escenario del chat ---------- */
+    .chat-marco {
+      max-width: 760px; margin: 0 auto; border-radius: 22px; overflow: hidden;
+      border: 1px solid var(--borde); background: var(--superficie);
+      box-shadow: 0 18px 50px rgba(30, 70, 140, 0.14);
+    }
+    .chat-cabecera {
+      display: flex; align-items: center; gap: 14px; padding: 18px 22px; color: #fff;
+      background: linear-gradient(120deg, #1c5cab 0%, #2a78d6 55%, #4a3aa7 100%);
+    }
+    .avatar-luisa {
+      width: 54px; height: 54px; border-radius: 50%; flex-shrink: 0; position: relative;
+      background: rgba(255, 255, 255, 0.16); display: flex; align-items: center; justify-content: center;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.35);
+    }
+    .avatar-luisa svg { width: 34px; height: 34px; }
+    .chat-cabecera .quien { line-height: 1.25; }
+    .chat-cabecera .quien strong { font-size: 1.25rem; display: block; }
+    .chat-cabecera .quien span { font-size: 0.82rem; opacity: 0.92; display: flex; align-items: center; gap: 6px; }
+    .punto-vivo { width: 8px; height: 8px; border-radius: 50%; background: #6dff9e; display: inline-block; animation: latido 1.6s infinite; }
+    @keyframes latido { 0%,100% { box-shadow: 0 0 0 0 rgba(109,255,158,0.55);} 50% { box-shadow: 0 0 0 6px rgba(109,255,158,0);} }
+    .chat-cabecera .chispa { margin-left: auto; font-size: 1.4rem; animation: brillo 2.8s ease-in-out infinite; }
+    @keyframes brillo { 0%,100% { transform: scale(1) rotate(0deg); opacity: .85;} 50% { transform: scale(1.25) rotate(12deg); opacity: 1;} }
+
+    #conversacion {
+      display: flex; flex-direction: column; gap: 14px; height: 52vh; min-height: 340px;
+      overflow-y: auto; padding: 22px;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(42,120,214,0.06), transparent 42%),
+        radial-gradient(circle at 88% 92%, rgba(74,58,167,0.06), transparent 42%);
+    }
+    .fila { display: flex; gap: 10px; align-items: flex-end; animation: aparecer 0.35s ease both; }
+    .fila.usuario { justify-content: flex-end; }
+    @keyframes aparecer { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: translateY(0);} }
+    .mini-avatar {
+      width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(130deg, #2a78d6, #4a3aa7);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .mini-avatar svg { width: 19px; height: 19px; }
+    .burbuja {
+      max-width: 76%; padding: 12px 16px; border-radius: 18px; white-space: pre-wrap;
+      font-size: 0.96rem; line-height: 1.5;
+    }
+    .fila.usuario .burbuja {
+      background: linear-gradient(120deg, #2a78d6, #3d63c9); color: #fff;
+      border-bottom-right-radius: 6px; box-shadow: 0 4px 14px rgba(42,120,214,0.35);
+    }
+    .fila.asistente .burbuja {
+      background: var(--superficie); border: 1px solid var(--linea);
+      border-bottom-left-radius: 6px; box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    }
+    .puntos { display: inline-flex; gap: 5px; padding: 4px 2px; }
+    .puntos i {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--acento); display: block;
+      animation: rebote 1.2s infinite;
+    }
+    .puntos i:nth-child(2) { animation-delay: 0.15s; }
+    .puntos i:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes rebote { 0%,60%,100% { transform: translateY(0); opacity: .45;} 30% { transform: translateY(-6px); opacity: 1;} }
+
+    .zona-escribir { padding: 14px 18px 18px; border-top: 1px solid var(--linea); }
+    #formulario { display: flex; gap: 10px; }
+    #entrada {
+      flex: 1; border-radius: 999px; padding: 13px 20px; font-size: 1rem;
+      border: 2px solid var(--linea); transition: border-color 0.15s;
+    }
+    #entrada:focus { outline: none; border-color: var(--acento); }
+    #btnEnviar {
+      width: 50px; height: 50px; border-radius: 50%; border: 0; cursor: pointer; flex-shrink: 0;
+      background: linear-gradient(130deg, #2a78d6, #4a3aa7); color: #fff; font-size: 1.25rem;
+      display: flex; align-items: center; justify-content: center; transition: transform 0.12s;
+    }
+    #btnEnviar:hover { transform: scale(1.08); }
+    .sugerencias { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .sugerencias button {
+      border: 1px solid var(--linea); background: var(--superficie); color: var(--tinta-2);
+      border-radius: 999px; padding: 8px 14px; cursor: pointer; font-size: 0.86rem;
+      transition: all 0.15s;
+    }
+    .sugerencias button:hover {
+      border-color: var(--acento); color: var(--acento); transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(42,120,214,0.18);
+    }
+    @media (max-width: 560px) { .burbuja { max-width: 86%; } #conversacion { height: 56vh; } }
   </style>
 </head>
 <body>
@@ -33,22 +108,43 @@
   </header>
 
   <main>
-    <h1>Asistente virtual «Luisa»</h1>
-    <p class="sub">Pregúntale lo que quieras: es experta en lentes, graduaciones y tratamientos, y puede agendar tu cita al momento.</p>
+    <div class="chat-marco">
+      <div class="chat-cabecera">
+        <div class="avatar-luisa" id="avatarLuisa">
+          <svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round">
+            <circle cx="14" cy="26" r="8.5" />
+            <circle cx="34" cy="26" r="8.5" />
+            <path d="M22.5 25 Q24 22.5 25.5 25" />
+            <path d="M5.5 25 L2.5 22.5 M42.5 25 L45.5 22.5" />
+            <path d="M17 12 L19 8 M24 11 L24 6.5 M31 12 L29 8" stroke-width="2" />
+          </svg>
+        </div>
+        <div class="quien">
+          <strong>Luisa</strong>
+          <span><i class="punto-vivo"></i> Asistente inteligente de Ópticas Luisa · En línea 24/7</span>
+        </div>
+        <div class="chispa">✨</div>
+      </div>
 
-    <div class="tarjeta">
       <div id="conversacion"></div>
-      <form id="formulario">
-        <input type="text" id="entrada" placeholder="Escribe tu pregunta…" autocomplete="off" />
-        <button type="submit" class="boton">Enviar</button>
-      </form>
-      <div class="sugerencias">
-        <button type="button">¿Qué significa mi graduación -2.50?</button>
-        <button type="button">¿Qué son los lentes progresivos?</button>
-        <button type="button">Quiero agendar una cita</button>
-        <button type="button">¿Me conviene el filtro de luz azul?</button>
+
+      <div class="zona-escribir">
+        <form id="formulario">
+          <input type="text" id="entrada" placeholder="Escríbele a Luisa…" autocomplete="off" />
+          <button type="submit" id="btnEnviar" aria-label="Enviar">➤</button>
+        </form>
+        <div class="sugerencias">
+          <button type="button">👓 ¿Qué armazón le va a mi cara?</button>
+          <button type="button">📋 Explícame mi graduación</button>
+          <button type="button">📅 Quiero agendar una cita</button>
+          <button type="button">💻 Lentes para computadora</button>
+        </div>
       </div>
     </div>
+
+    <p class="aviso" style="max-width:760px;margin:16px auto 0">
+      Luisa orienta y agenda citas; no da diagnósticos. Tu optometrista en sucursal siempre tiene la última palabra. 💙
+    </p>
   </main>
 
   <script src="js/asistente.js"></script>

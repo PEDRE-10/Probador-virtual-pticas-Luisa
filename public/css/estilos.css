@@ -150,3 +150,29 @@ input[type="text"], input[type="tel"], textarea, select {
   color: var(--tinta);
   font: inherit;
 }
+
+/* Botón flotante para hablar con Luisa (páginas públicas) */
+.luisa-flotante {
+  position: fixed; right: 22px; bottom: 22px; z-index: 60;
+  display: flex; align-items: center; gap: 10px; text-decoration: none;
+}
+.luisa-flotante .globo {
+  background: var(--superficie); color: var(--tinta); border: 1px solid var(--borde);
+  border-radius: 999px; padding: 9px 16px; font-size: 0.88rem; font-weight: 600;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); white-space: nowrap;
+}
+.luisa-flotante .circulo {
+  width: 60px; height: 60px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(130deg, #2a78d6, #4a3aa7);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 8px 24px rgba(42, 120, 214, 0.45);
+  animation: luisa-pulso 2.4s infinite;
+  transition: transform 0.15s;
+}
+.luisa-flotante:hover .circulo { transform: scale(1.1); }
+.luisa-flotante .circulo svg { width: 34px; height: 34px; }
+@keyframes luisa-pulso {
+  0%, 100% { box-shadow: 0 8px 24px rgba(42,120,214,0.45), 0 0 0 0 rgba(42,120,214,0.35); }
+  50% { box-shadow: 0 8px 24px rgba(42,120,214,0.45), 0 0 0 14px rgba(42,120,214,0); }
+}
+@media (max-width: 560px) { .luisa-flotante .globo { display: none; } }
