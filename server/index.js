@@ -29,6 +29,8 @@ const iaDisponible = Boolean(
   process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN
 );
 const client = iaDisponible ? new Anthropic() : null;
+// Luisa opera con el modelo más capaz de Claude para conversación de primer
+// nivel (calidad tipo ChatGPT). No degradar sin decisión del dueño.
 const MODELO = "claude-opus-4-8";
 
 const SISTEMA_ASISTENTE = `Eres "Luisa", la asistente virtual de Ópticas Luisa, una óptica mexicana.
@@ -216,7 +218,7 @@ app.post("/api/chat", async (req, res) => {
     for (let vuelta = 0; vuelta < 5; vuelta++) {
       respuesta = await client.messages.create({
         model: MODELO,
-        max_tokens: 1024,
+        max_tokens: 2048,
         thinking: { type: "adaptive" },
         system: [
           {
