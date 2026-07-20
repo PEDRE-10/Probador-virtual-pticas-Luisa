@@ -162,17 +162,17 @@ input[type="text"], input[type="tel"], textarea, select {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); white-space: nowrap;
 }
 .luisa-flotante .circulo {
-  width: 60px; height: 60px; border-radius: 50%; flex-shrink: 0;
-  background: linear-gradient(130deg, #2a78d6, #4a3aa7);
+  width: 62px; height: 62px; border-radius: 50%; flex-shrink: 0;
+  background: #ffffff; border: 2px solid rgba(91, 196, 180, 0.5);
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 8px 24px rgba(42, 120, 214, 0.45);
+  box-shadow: 0 8px 24px rgba(47, 148, 136, 0.45);
   animation: luisa-pulso 2.4s infinite;
   transition: transform 0.15s;
 }
 .luisa-flotante:hover .circulo { transform: scale(1.1); }
-.luisa-flotante .circulo svg { width: 34px; height: 34px; }
+.luisa-flotante .circulo img { width: 74%; height: auto; }
 @keyframes luisa-pulso {
-  0%, 100% { box-shadow: 0 8px 24px rgba(42,120,214,0.45), 0 0 0 0 rgba(42,120,214,0.35); }
-  50% { box-shadow: 0 8px 24px rgba(42,120,214,0.45), 0 0 0 14px rgba(42,120,214,0); }
+  0%, 100% { box-shadow: 0 8px 24px rgba(47,148,136,0.45), 0 0 0 0 rgba(91,196,180,0.4); }
+  50% { box-shadow: 0 8px 24px rgba(47,148,136,0.45), 0 0 0 14px rgba(91,196,180,0); }
 }
 @media (max-width: 560px) { .luisa-flotante .globo { display: none; } }

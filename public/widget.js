@@ -1,6 +1,7 @@
 // Widget de Luisa para incrustar en cualquier sitio web (una sola línea):
 //   <script src="https://luisa.opticasluisa.com/widget.js" defer></script>
-// Muestra una burbuja flotante que abre el chat sin salir de la página.
+// Muestra la burbuja con el logo de Ópticas Luisa que abre el chat sin salir
+// de la página anfitriona.
 (() => {
   const ORIGEN = new URL(document.currentScript.src).origin;
 
@@ -8,45 +9,43 @@
   estilos.textContent = `
     #luisa-burbuja {
       position: fixed; right: 22px; bottom: 22px; z-index: 999998;
-      width: 62px; height: 62px; border-radius: 50%; border: 0; cursor: pointer;
-      background: linear-gradient(130deg, #2a78d6, #4a3aa7);
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 8px 24px rgba(42,120,214,0.45);
+      width: 64px; height: 64px; border-radius: 50%; cursor: pointer;
+      background: #ffffff; border: 2px solid rgba(91,196,180,0.5);
+      display: flex; align-items: center; justify-content: center; padding: 0;
+      box-shadow: 0 8px 24px rgba(47,148,136,0.45);
       animation: luisa-pulso 2.4s infinite; transition: transform .15s;
     }
     #luisa-burbuja:hover { transform: scale(1.08); }
-    #luisa-burbuja svg { width: 34px; height: 34px; }
+    #luisa-burbuja img { width: 74%; height: auto; }
+    #luisa-burbuja.abierto { background: linear-gradient(130deg, #2f9488, #0f6e62); border-color: transparent; }
+    #luisa-burbuja svg { width: 22px; height: 22px; }
     @keyframes luisa-pulso {
-      0%,100% { box-shadow: 0 8px 24px rgba(42,120,214,.45), 0 0 0 0 rgba(42,120,214,.35); }
-      50% { box-shadow: 0 8px 24px rgba(42,120,214,.45), 0 0 0 14px rgba(42,120,214,0); }
+      0%,100% { box-shadow: 0 8px 24px rgba(47,148,136,.45), 0 0 0 0 rgba(91,196,180,.4); }
+      50% { box-shadow: 0 8px 24px rgba(47,148,136,.45), 0 0 0 14px rgba(91,196,180,0); }
     }
     #luisa-panel {
-      position: fixed; right: 22px; bottom: 96px; z-index: 999999;
-      width: 380px; max-width: calc(100vw - 32px); height: 600px; max-height: calc(100vh - 120px);
+      position: fixed; right: 22px; bottom: 98px; z-index: 999999;
+      width: 380px; max-width: calc(100vw - 32px); height: 600px; max-height: calc(100vh - 122px);
       border-radius: 18px; overflow: hidden; box-shadow: 0 18px 60px rgba(0,0,0,0.3);
       background: #fff; display: none; border: 0;
     }
     #luisa-panel.abierto { display: block; animation: luisa-sube .25s ease; }
     @keyframes luisa-sube { from { opacity: 0; transform: translateY(16px);} to { opacity: 1; transform: translateY(0);} }
     @media (max-width: 480px) {
-      #luisa-panel { right: 8px; bottom: 88px; width: calc(100vw - 16px); height: calc(100vh - 104px); }
+      #luisa-panel { right: 8px; bottom: 90px; width: calc(100vw - 16px); height: calc(100vh - 106px); }
     }
   `;
   document.head.appendChild(estilos);
 
-  const LENTES =
-    '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round">' +
-    '<circle cx="14" cy="26" r="8.5"/><circle cx="34" cy="26" r="8.5"/>' +
-    '<path d="M22.5 25 Q24 22.5 25.5 25"/><path d="M5.5 25 L2.5 22.5 M42.5 25 L45.5 22.5"/>' +
-    '<path d="M17 12 L19 8 M24 11 L24 6.5 M31 12 L29 8" stroke-width="2"/></svg>';
+  const LOGO = `<img src="${ORIGEN}/img/logo.png" alt="Luisa — Ópticas Luisa" />`;
   const CERRAR =
-    '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" style="width:22px;height:22px">' +
+    '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round">' +
     '<path d="M6 6 L18 18 M18 6 L6 18"/></svg>';
 
   const burbuja = document.createElement("button");
   burbuja.id = "luisa-burbuja";
   burbuja.setAttribute("aria-label", "Habla con Luisa, asistente de Ópticas Luisa");
-  burbuja.innerHTML = LENTES;
+  burbuja.innerHTML = LOGO;
 
   const panel = document.createElement("iframe");
   panel.id = "luisa-panel";
@@ -56,7 +55,8 @@
   burbuja.addEventListener("click", () => {
     if (!panel.src) panel.src = ORIGEN + "/asistente-widget.html";
     const abierto = panel.classList.toggle("abierto");
-    burbuja.innerHTML = abierto ? CERRAR : LENTES;
+    burbuja.classList.toggle("abierto", abierto);
+    burbuja.innerHTML = abierto ? CERRAR : LOGO;
   });
 
   document.body.appendChild(panel);
