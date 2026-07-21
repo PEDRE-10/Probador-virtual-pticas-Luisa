@@ -3,89 +3,137 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ópticas Luisa — Plataforma con Inteligencia Artificial</title>
+  <title>Ópticas Luisa — Ver mejor es vivir mejor</title>
+  <meta name="description" content="Óptica de confianza en Zapopan. Armazones, lentes de contacto y examen visual gratuito. Lentes listos el mismo día. Pruébate armazones con la cámara y agenda tu cita en línea." />
   <link rel="icon" href="img/logo.png" />
   <link rel="stylesheet" href="css/estilos.css" />
+  <link rel="stylesheet" href="css/inicio.css" />
 </head>
 <body>
   <header class="sitio">
-    <a class="logo" href="index.html">Ópticas <span>Luisa</span></a>
+    <a class="logo" href="index.html"><img src="img/logo.png" alt="" class="logo-img" />Ópticas <span>Luisa</span></a>
     <nav>
-      <a href="index.html" class="activo">Inicio</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="catalogo.html">Catálogo</a>
       <a href="probador.html">Probador virtual</a>
-      <a href="receta.html">Lector de recetas</a>
-      <a href="asistente.html">Asistente IA</a>
-      <a href="citas.html">Citas</a>
-      <a href="admin.html">Panel administrativo</a>
+      <a href="citas.html" class="nav-cita">Agendar cita</a>
     </nav>
   </header>
 
   <main>
-    <section style="margin-bottom: 28px">
-      <span class="etiqueta">Óptica potenciada con IA</span>
-      <h1>La óptica más inteligente de tu ciudad</h1>
-      <p class="sub">
-        Prueba armazones con la cámara, digitaliza tu receta con una foto, agenda tu cita
-        en línea y resuelve cualquier duda con nuestra asistente virtual.
-      </p>
-      <a class="boton" href="probador.html">Probar lentes ahora</a>
-      <a class="boton secundario" href="asistente.html" style="margin-left: 8px">Hablar con la asistente</a>
+    <!-- ---------- HERO ---------- -->
+    <section class="hero">
+      <div class="hero-halo"></div>
+      <div class="hero-contenido">
+        <span class="hero-kicker">✦ Óptica de confianza en Zapopan</span>
+        <h1>Ver mejor es<br /><em>vivir mejor</em></h1>
+        <p class="hero-sub">
+          Armazones, lentes de contacto y examen visual gratuito en Zapopan.
+          Lentes listos el mismo día, sin citas largas.
+        </p>
+        <div class="hero-acciones">
+          <a class="boton grande" href="probador.html">Probar armazones</a>
+          <a class="boton secundario grande" href="citas.html">Agendar cita gratis</a>
+        </div>
+        <div class="hero-chips">
+          <span class="chip">⭐ 5.0 y 4.8 en Google</span>
+          <span class="chip">🛡️ Garantía total</span>
+          <span class="chip">⚡ Entrega Exprés</span>
+          <span class="chip">💳 Pago en línea</span>
+        </div>
+      </div>
     </section>
 
-    <div class="cuadricula">
-      <article class="tarjeta">
-        <h2>🕶️ Probador virtual</h2>
-        <p>
-          Detección facial en tiempo real (MediaPipe) para probarte armazones con la cámara.
-          La IA analiza la forma de tu rostro, estima tu distancia pupilar y te recomienda
-          los estilos que mejor te quedan.
-        </p>
-        <a href="probador.html">Abrir probador →</a>
-      </article>
+    <!-- ---------- SERVICIOS ---------- -->
+    <section id="servicios" class="seccion">
+      <p class="seccion-kicker">¿Qué hacemos?</p>
+      <h2 class="seccion-titulo">Todo lo que necesitas en un solo lugar</h2>
+      <p class="seccion-intro">
+        Examen visual gratuito, más de 200 armazones y lentes listos el mismo día. Eso es Ópticas Luisa.
+      </p>
+      <div class="servicios-grid">
+        <article class="servicio">
+          <div class="servicio-icono">👁️</div>
+          <h3>Examen Visual</h3>
+          <p>Diagnóstico completo con equipos modernos. Detectamos problemas de visión, presión ocular y salud general del ojo.</p>
+        </article>
+        <article class="servicio destacado">
+          <div class="servicio-icono">✨</div>
+          <h3>Probador Virtual</h3>
+          <p>Pruébate cientos de armazones desde casa con tu cámara. La IA detecta tu rostro y te recomienda tu estilo.</p>
+          <a class="servicio-cta" href="probador.html">Probar ahora →</a>
+        </article>
+        <article class="servicio">
+          <div class="servicio-icono">👓</div>
+          <h3>Armazones</h3>
+          <p>Más de 200 modelos en existencia: Ray-Ban, Oakley, Vogue y más. Encuéntralos en sucursal o pruébalos desde casa.</p>
+          <a class="servicio-cta" href="catalogo.html">Ver catálogo →</a>
+        </article>
+        <article class="servicio">
+          <div class="servicio-icono">🔵</div>
+          <h3>Lentes de Contacto</h3>
+          <p>Opciones desechables, mensuales y de uso prolongado. Te enseñamos a usarlos correctamente desde el primer día.</p>
+        </article>
+        <article class="servicio">
+          <div class="servicio-icono">🧒</div>
+          <h3>Optometría Pediátrica</h3>
+          <p>Especialistas en visión infantil. Detectamos problemas a tiempo para proteger el desarrollo visual de tus hijos.</p>
+        </article>
+        <article class="servicio">
+          <div class="servicio-icono">⚡</div>
+          <h3>Servicio Exprés</h3>
+          <p>Con nuestro equipo logramos tener tus lentes listos el mismo día. Sin esperas largas.</p>
+        </article>
+      </div>
+    </section>
 
-      <article class="tarjeta">
-        <h2>📅 Citas en línea</h2>
-        <p>
-          Agenda tu examen de la vista o adaptación de lentes de contacto eligiendo día y
-          horario con disponibilidad en tiempo real — o pídele a la asistente que la agende por ti.
-        </p>
-        <a href="citas.html">Agendar cita →</a>
-      </article>
+    <!-- ---------- CÓMO FUNCIONA ---------- -->
+    <section id="como-funciona" class="seccion seccion-alterna">
+      <p class="seccion-kicker">Cómo funciona</p>
+      <h2 class="seccion-titulo">Tres pasos y listo</h2>
+      <div class="pasos">
+        <div class="paso">
+          <div class="paso-num">1</div>
+          <h3>Agenda o visítanos</h3>
+          <p>Reserva tu cita en línea o llega directamente a cualquiera de nuestras sucursales. Sin esperas largas.</p>
+        </div>
+        <div class="paso">
+          <div class="paso-num">2</div>
+          <h3>Elige tus lentes</h3>
+          <p>Te hacemos un examen visual gratuito y te ayudamos a encontrar el armazón perfecto para ti.</p>
+        </div>
+        <div class="paso">
+          <div class="paso-num">3</div>
+          <h3>Servicio Exprés</h3>
+          <p>Con nuestro equipo logramos tener tus lentes listos el mismo día.</p>
+        </div>
+      </div>
+      <div class="garantias">
+        <div class="garantia"><strong>🛡️ Garantía en todos los productos</strong><span>Si hay algún defecto, lo resolvemos sin costo adicional.</span></div>
+        <div class="garantia"><strong>🔄 Cambios y devoluciones</strong><span>¿No quedó como esperabas? Te ayudamos a encontrar la mejor solución.</span></div>
+        <div class="garantia"><strong>🔒 Pago 100% seguro</strong><span>Aceptamos tarjeta, PayPal y OXXO. Tus datos siempre protegidos.</span></div>
+      </div>
+    </section>
 
-      <article class="tarjeta">
-        <h2>📄 Lector de recetas con IA</h2>
-        <p>
-          Sube una foto de tu receta y la visión artificial de Claude extrae esfera,
-          cilindro, eje, adición y distancia pupilar, y te explica tu graduación en
-          palabras sencillas.
-        </p>
-        <a href="receta.html">Digitalizar receta →</a>
-      </article>
+    <!-- ---------- IA / LUISA ---------- -->
+    <section class="seccion cta-luisa">
+      <div class="cta-luisa-caja">
+        <img src="img/logo.png" alt="Luisa" class="cta-luisa-logo" />
+        <div>
+          <h2>Conoce a Luisa, tu asistente inteligente</h2>
+          <p>Resuelve dudas sobre lentes y tratamientos, te recomienda armazones según tu rostro y agenda tu cita — al instante, 24/7.</p>
+          <a class="boton grande" href="asistente.html">💬 Hablar con Luisa</a>
+        </div>
+      </div>
+    </section>
 
-      <article class="tarjeta">
-        <h2>💬 Asistente virtual</h2>
-        <p>
-          "Luisa" responde dudas sobre lentes, tratamientos y graduaciones, te ayuda a
-          elegir armazón y agenda tu cita — disponible 24/7.
-        </p>
-        <a href="asistente.html">Chatear →</a>
-      </article>
-
-      <article class="tarjeta">
-        <h2>📊 Panel administrativo</h2>
-        <p>
-          Indicadores del negocio con pronóstico de ventas, alertas de inventario y
-          recordatorios automáticos de renovación de lentes para tus clientes.
-        </p>
-        <a href="admin.html">Ver panel →</a>
-      </article>
-    </div>
-
-    <p class="aviso" style="margin-top: 28px">
+    <p class="aviso pie-aviso">
       Las herramientas en línea de Ópticas Luisa son orientativas y no sustituyen la
       valoración de un optometrista u oftalmólogo. Agenda tu examen profesional en sucursal.
     </p>
   </main>
+
   <a class="luisa-flotante" href="asistente.html" aria-label="Habla con Luisa">
     <span class="globo">💬 Habla con Luisa</span>
     <span class="circulo"><img src="img/logo.png" alt="Luisa" /></span>
